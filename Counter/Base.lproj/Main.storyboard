@@ -80,9 +80,9 @@
                     <connections>
                         <outlet property="counterLabel" destination="2at-nZ-LL8" id="Ii5-gm-A9E"/>
                         <outlet property="historyUITextView" destination="oiI-wJ-Ph1" id="AdG-tT-a9H"/>
-                        <outlet property="minusUIButton" destination="5CU-2G-HLP" id="a8H-Dr-SAq"/>
-                        <outlet property="plusUIButton" destination="AhW-10-Itr" id="uep-aG-lUB"/>
-                        <outlet property="resetUIButton" destination="AI4-uH-2rX" id="3e2-ZI-BEQ"/>
+                        <outlet property="minusButton" destination="5CU-2G-HLP" id="a8H-Dr-SAq"/>
+                        <outlet property="plusButton" destination="AhW-10-Itr" id="uep-aG-lUB"/>
+                        <outlet property="resetButton" destination="AI4-uH-2rX" id="3e2-ZI-BEQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

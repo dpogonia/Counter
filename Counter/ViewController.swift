@@ -7,50 +7,59 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    private var counter: Int = 0
+private class ViewController: UIViewController {
     
-    @IBAction func didTapPlusButton(_ sender: Any) {
-        counter += 1
-        appendToHistory("значение изменено на +1")
-        updateLabel()
-    }
-    @IBAction func didTapMinusButton(_ sender: Any) {
-        if counter > 0 {
-            counter -= 1
-            appendToHistory("значение изменено на -1")
-            updateLabel()
-        } else {
-            appendToHistory("попытка уменьшить значение счётчика ниже 0")
-        }
-        
-    }
-    @IBAction func didTapResetButton(_ sender: Any) {
-        counter = 0
-        appendToHistory("значение сброшено")
-        updateLabel()
-    }
+    // MARK: - IBOutlets
     
-    @IBOutlet weak var plusUIButton: UIButton!
-    @IBOutlet weak var resetUIButton: UIButton!
-    @IBOutlet weak var counterLabel: UILabel!
-    @IBOutlet weak var minusUIButton: UIButton!
-    @IBOutlet weak var historyUITextView: UITextView!
+    @IBOutlet weak private var historyUITextView: UITextView!
+    @IBOutlet weak private var counterLabel: UILabel!
+    @IBOutlet weak private var plusButton: UIButton!
+    @IBOutlet weak private var minusButton: UIButton!
+    @IBOutlet weak private var resetButton: UIButton!
+    
+    // MARK: - Private Properties
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         return formatter
     }()
+    private var counter: Int = 0
     
-    private func appendToHistory(_ message: String) {
-        let time = dateFormatter.string(from: Date())
-        let entry = "\(time): \(message)\n"
-        historyUITextView.text += entry
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        updateUI()
     }
     
+    // MARK: - Actions
     
-    private func updateLabel() {
+    @IBAction private func didTapPlusButton(_ sender: Any) {
+        counter += 1
+        appendText("значение изменено на +1")
+        updateUI()
+    }
+    @IBAction private func didTapMinusButton(_ sender: Any) {
+        if counter > 0 {
+            counter -= 1
+            appendText("значение изменено на -1")
+            updateUI()
+        } else {
+            appendText("попытка уменьшить значение счётчика ниже 0")
+        }
+        
+    }
+    @IBAction private func didTapResetButton(_ sender: Any) {
+        counter = 0
+        appendText("значение сброшено")
+        updateUI()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func updateUI() {
         counterLabel.text = "Значение счетчика: \(counter)"
     }
     
@@ -60,24 +69,29 @@ class ViewController: UIViewController {
         counterLabel.layer.masksToBounds = true
         
         // Buttons
-        plusUIButton.setTitle("+", for: .normal)
-        plusUIButton.tintColor = .white
-        minusUIButton.setTitle("-", for: .normal)
-        minusUIButton.tintColor = .white
-        resetUIButton.setImage( UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        resetUIButton.tintColor = .white
+        plusButton.setTitle("+", for: .normal)
+        plusButton.tintColor = .white
+        minusButton.setTitle("-", for: .normal)
+        minusButton.tintColor = .white
+        resetButton.setImage( UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        resetButton.tintColor = .white
         
         // History
-        historyUITextView.text = "История изменений: \n"  // Начальный текст
+        historyUITextView.text = "История изменений: \n"
         historyUITextView.isEditable = false
         historyUITextView.isScrollEnabled = true
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        setupUI()
-        updateLabel()
+    private func appendText(_ message: String) {
+        let time = dateFormatter.string(from: Date())
+        let entry = "\(time): \(message)\n"
+        historyUITextView.text += entry
+        
+        let bottom = NSRange(
+            location: historyUITextView.text.count - 1,
+            length: 1
+        )
+        historyUITextView.scrollRangeToVisible(bottom)
     }
 }
 
