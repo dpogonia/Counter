@@ -49,7 +49,6 @@ private class ViewController: UIViewController {
         } else {
             appendText("попытка уменьшить значение счётчика ниже 0")
         }
-        
     }
     @IBAction private func didTapResetButton(_ sender: Any) {
         counter = 0
@@ -62,7 +61,6 @@ private class ViewController: UIViewController {
     private func updateUI() {
         counterLabel.text = "Значение счетчика: \(counter)"
     }
-    
     private func setupUI() {
         // Label
         counterLabel.layer.cornerRadius = 12
@@ -81,12 +79,10 @@ private class ViewController: UIViewController {
         historyUITextView.isEditable = false
         historyUITextView.isScrollEnabled = true
     }
-    
     private func appendText(_ message: String) {
         let time = dateFormatter.string(from: Date())
         let entry = "\(time): \(message)\n"
         historyUITextView.text += entry
-        
         let bottom = NSRange(
             location: historyUITextView.text.count - 1,
             length: 1
@@ -94,4 +90,3 @@ private class ViewController: UIViewController {
         historyUITextView.scrollRangeToVisible(bottom)
     }
 }
-
