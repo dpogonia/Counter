@@ -7,7 +7,7 @@
 
 import UIKit
 
-private class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     // MARK: - IBOutlets
     
@@ -24,14 +24,24 @@ private class ViewController: UIViewController {
         formatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
         return formatter
     }()
+    
     private var counter: Int = 0
+    private var counterArray: [Int] = []
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let loadedCount = UserDefaults.standard.integer(forKey: "counterValue")
+        counter = loadedCount
+        
+        let loadedHistory = UserDefaults.standard.stringArray(forKey: "counterHistory") ?? []
+
         setupUI()
         updateUI()
+        
+        historyUITextView.text = "История изменений:\n" + loadedHistory.joined(separator: "\n")
     }
     
     // MARK: - Actions
@@ -45,6 +55,8 @@ private class ViewController: UIViewController {
         if counter > 0 {
             counter -= 1
             appendText("значение изменено на -1")
+            UserDefaults.standard.set(counter, forKey: "counterValue")
+            UserDefaults.standard.set(counterArray, forKey: "counterHistory")
             updateUI()
         } else {
             appendText("попытка уменьшить значение счётчика ниже 0")
@@ -79,14 +91,20 @@ private class ViewController: UIViewController {
         historyUITextView.isEditable = false
         historyUITextView.isScrollEnabled = true
     }
+    
     private func appendText(_ message: String) {
+        // 1. Создаем дату и текст записи
         let time = dateFormatter.string(from: Date())
-        let entry = "\(time): \(message)\n"
+        let entry = "[\(time)]: \(message)\n"
+        
+        // 2. Добавляем текст в UITextView
         historyUITextView.text += entry
-        let bottom = NSRange(
-            location: historyUITextView.text.count - 1,
-            length: 1
-        )
+        
+        // 3. Прокручиваем вниз
+        let bottom = NSRange(location: historyUITextView.text.count - 1, length: 1)
         historyUITextView.scrollRangeToVisible(bottom)
+        
+        // Если хочешь оставить лог в консоли для "пустой" истории:
+        // print("No history yet") // Это не вызовет ошибку
     }
 }
